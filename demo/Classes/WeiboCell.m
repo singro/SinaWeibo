@@ -13,12 +13,15 @@
 
 @synthesize detail = detail_;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail {
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail obj:(HJObjManager *)_objMan {  // asynchronous load images
+//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail {
     
     //NSLog(@"%@", detail);
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-    
+        objMan = _objMan;
+        
         // show user avatar
         UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(3, 3, 40, 40)];
         
@@ -65,8 +68,6 @@
         [self addSubview:title];
         [title release];
         
-        // Content & background
-        UIImage *img = [UIImage imageNamed:@"buble.png"];
         
         // weibo txt
         UILabel *txt = [[UILabel alloc] initWithFrame:CGRectMake(60, 23, 240, height1)];
@@ -83,11 +84,19 @@
         // weibo image
         NSString *picURL1 = [detail objectForKey:@"bmiddle_pic"];
         if (picURL1 != NULL) {
-            UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(60, 25+height1, 75, 75)];
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:picURL1]]];
-            [photo setBackgroundImage:image forState:UIControlStateNormal];
-            [self addSubview:photo];
-            [photo release];
+            // With HJManageImage
+            HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60, 25+height1, 75, 75)] autorelease];
+            mi.tag = 999;
+            [self addSubview:mi];
+            mi.url = [NSURL URLWithString:picURL1];
+            [objMan manage:mi];
+            
+            // With UIButton
+//            UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(60, 25+height1, 75, 75)];
+//            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:picURL1]]];
+//            [photo setBackgroundImage:image forState:UIControlStateNormal];
+//            [self addSubview:photo];
+//            [photo release];
             height1 = height1 + 77;
         }
         
@@ -115,11 +124,19 @@
             
             NSString *picURL = [retweeted objectForKey:@"bmiddle_pic"];
             if (picURL != NULL) {
-                UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(60, height1 + 27 + 15 +2 + height2, 75, 75)];
-                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:picURL]]];
-                [photo setBackgroundImage:image forState:UIControlStateNormal];
-                [self addSubview:photo];
-                [photo release];
+                // With HJManageImage
+                HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60, height1 + 27 + 15 +2 + height2, 75, 75)] autorelease];
+                mi.tag = 1000;
+                [self addSubview:mi];
+                mi.url = [NSURL URLWithString:picURL];
+                [objMan manage:mi];
+                
+                // with button
+//                UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(60, height1 + 27 + 15 +2 + height2, 75, 75)];
+//                UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:picURL]]];
+//                [photo setBackgroundImage:image forState:UIControlStateNormal];
+//                [self addSubview:photo];
+//                [photo release];
                 height2_+=77;
             }
             

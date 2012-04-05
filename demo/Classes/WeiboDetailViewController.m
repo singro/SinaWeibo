@@ -13,11 +13,12 @@
 
 @synthesize detail;
 
-- (id)initWithData:(NSDictionary *)data
+- (id)initWithData:(NSDictionary *)data obj:(HJObjManager *)_objMan
 {
     self = [super init];
     if (self) {
         self.detail = data;
+        objMan = _objMan;
     }
     return self;
 }
@@ -43,7 +44,7 @@
     
     // draw tableview
     WeiboDetailContentViewController *vc = [[WeiboDetailContentViewController alloc] init];
-    [vc initWithData:detail];
+    [vc initWithData:detail obj:objMan];
     vc.view.frame = CGRectMake(0, 50+40, 320, 300);
     
     [self.view addSubview:vc.view];
@@ -51,7 +52,8 @@
     // draw header
     // show user avatar
     UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(3, 3+40, 40, 40)];
-    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[detail objectForKey:@"user"] objectForKey:@"profile_image_url"]]]];
+    //UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[detail objectForKey:@"user"] objectForKey:@"profile_image_url"]]]];
+    UIImage *image =[UIImage imageNamed:@"photo.png"];
     [photo setBackgroundImage:image forState:UIControlStateNormal];
     [self.view addSubview:photo];
     [photo release];
@@ -74,17 +76,96 @@
     
     // draw bottom bar
     UIButton *retweet = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [retweet setFrame:CGRectMake(0, 370, 150, 44)];
-    [retweet setTitle:@"Retweet" forState:UIControlStateNormal];
+    [retweet setFrame:CGRectMake(3, 370, 100, 44)];
+    [retweet setTitle:@"Repost" forState:UIControlStateNormal];
+    [retweet addTarget:self action:@selector(onRepostButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:retweet];
     
     UIButton *comment = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [comment setFrame:CGRectMake(170, 370, 150, 44)];
+    [comment setFrame:CGRectMake(217, 370, 100, 44)];
     [comment setTitle:@"Comment" forState:UIControlStateNormal];
+    [comment addTarget:self action:@selector(onCommentButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:comment];
+    
+    UIButton *favourate = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [favourate setFrame:CGRectMake(110, 370, 100, 44)];
+    [favourate setTitle:@"Favour" forState:UIControlStateNormal];
+    [self.view addSubview:favourate];
 }
 
+- (void)onCommentButtonPressed
+{
+    NSString *Id = [NSString stringWithFormat:@"%@",[self.detail objectForKey:@"id"]];
+    
+    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:kWBSDKDemoAppKey appSecret:kWBSDKDemoAppSecret text:@"" image:nil weiboType:Comment Id:Id];
+    [sendView setDelegate:self];
+    
+    [sendView show:YES];
+    [sendView release];
+}
 
+- (void)onRepostButtonPressed
+{
+    NSString *txt = [NSString stringWithFormat:@" //@%@:%@", [[self.detail objectForKey:@"user"] objectForKey:@"screen_name"], [self.detail objectForKey:@"text"]];
+    NSString *Id = [NSString stringWithFormat:@"%@",[self.detail objectForKey:@"id"]];
+    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:kWBSDKDemoAppKey appSecret:kWBSDKDemoAppSecret text:txt image:nil weiboType:Repost Id:Id];
+    [sendView setDelegate:self];
+    
+    [sendView show:YES];
+    [sendView release];
+}
+
+- (void)onSendButtonPressed
+{
+    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:kWBSDKDemoAppKey appSecret:kWBSDKDemoAppSecret text:@"" image:[UIImage imageNamed:@"bg.png"] weiboType:Comment Id:nil];
+    [sendView setDelegate:self];
+    
+    [sendView show:YES];
+    [sendView release];
+}
+
+#pragma mark - WBSendViewDelegate Methods
+
+- (void)sendViewDidFinishSending:(WBSendView *)view
+{
+    [view hide:YES];
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"微博发送成功！" 
+													  delegate:nil
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+	[alertView show];
+	[alertView release];
+}
+
+- (void)sendView:(WBSendView *)view didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError: %@", error);
+    [view hide:YES];
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:nil 
+													   message:@"微博发送失败！" 
+													  delegate:nil
+											 cancelButtonTitle:@"确定" 
+											 otherButtonTitles:nil];
+	[alertView show];
+	[alertView release];
+}
+
+- (void)sendViewNotAuthorized:(WBSendView *)view
+{
+    [view hide:YES];
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)sendViewAuthorizeExpired:(WBSendView *)view
+{
+    [view hide:YES];
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+//  
 
 - (void)viewDidUnload
 {

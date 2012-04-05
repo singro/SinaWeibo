@@ -8,15 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "WBSDKTimelineViewController.h"
+#import "HJObjManager.h"
+#import "HJManagedImageV.h"
 
 
 
 @interface WeiboCell : UITableViewCell   {
     NSDictionary * detail_;
+    HJObjManager *objMan;
 }
 
 @property (strong, readwrite) NSDictionary * detail;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail;//data:(NSMutableArray *)timeLine index:(NSInteger)row;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail obj:(HJObjManager *)_objMan;  // asynchronous load images
+//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail;
 - (NSString *)convertDate:(NSString *)date;
 @end

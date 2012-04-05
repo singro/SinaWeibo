@@ -12,11 +12,12 @@
 
 @synthesize detail;
 
-- (id)initWithData:(NSDictionary *)data
+- (id)initWithData:(NSDictionary *)data obj:(HJObjManager *)_objMan
 {
     self = [super init];
     if (self) {
         self.detail = data;
+        objMan = _objMan;
     }
     return self;
 }
@@ -70,7 +71,7 @@
     }
     if (indexPath.row == 0) {
         //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        cell = [[CellBody alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier data:self.detail];
+        cell = [[CellBody alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier data:self.detail obj:objMan];
     }
     if (indexPath.row == 2) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];

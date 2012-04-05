@@ -12,6 +12,7 @@
 #import "WBSendView.h"
 #import "WeiboCell.h"
 #import "WeiboDetailViewController.h"
+#import "HJObjManager.h"
 
 
 @interface WBSDKTimelineViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, WBEngineDelegate, WBSendViewDelegate>
@@ -27,7 +28,11 @@
     UIActivityIndicatorView *indicatorView;
     
     UINavigationController *nav;
+    
+    HJObjManager* objMan;
 }
+
+//@property (assign, nonatomic) HJObjManager * objMan;
 
 - (id)initWithAppKey:(NSString *)theAppKey appSecret:(NSString *)theAppSecret;
 

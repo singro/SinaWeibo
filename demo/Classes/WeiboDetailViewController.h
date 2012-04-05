@@ -8,13 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "WeiboDetailContentViewController.h"
+#import "WBSendView.h"
+#import "WBEngine.h"
+#import "AppKey.h"
+#import "HJObjManager.h"
 
-@interface WeiboDetailViewController : UIViewController {
+@interface WeiboDetailViewController : UIViewController <WBEngineDelegate,WBSendViewDelegate> {
     NSDictionary *detail;
+    HJObjManager *objMan;
 }
 
 @property (strong, readwrite) NSDictionary *detail;
 
-- (id)initWithData:(NSDictionary *)data;
+- (id)initWithData:(NSDictionary *)data obj:(HJObjManager *)_objMan;
 
 @end

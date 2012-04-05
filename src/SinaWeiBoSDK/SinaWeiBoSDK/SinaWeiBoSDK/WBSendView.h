@@ -19,6 +19,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "WBEngine.h"
+#import "WeiboType.h"
 
 @class WBSendView;
 
@@ -59,6 +60,8 @@
     
     NSString    *contentText;
     UIImage     *contentImage;
+    WeiboType type;
+    NSString    *Id;
     
     UIInterfaceOrientation previousOrientation;
     
@@ -71,9 +74,11 @@
 
 @property (nonatomic, retain) NSString *contentText;
 @property (nonatomic, retain) UIImage *contentImage;
+@property  WeiboType type;
+@property (nonatomic, retain) NSString *Id;
 @property (nonatomic, assign) id<WBSendViewDelegate> delegate;
 
-- (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret text:(NSString *)text image:(UIImage *)image;
+- (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret text:(NSString *)text image:(UIImage *)image weiboType:(WeiboType)type_ Id:(NSString *)Id_;
 
 - (void)show:(BOOL)animated;
 - (void)hide:(BOOL)animated;

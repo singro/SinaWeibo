@@ -294,6 +294,41 @@
     }
 }
 
+- (void)repostWeiBoWithText:(NSString *)text Id:(NSString *)Id
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
+    
+    //NSString *sendText = [text URLEncodedString];
+    
+	[params setObject:(text ? text : @"") forKey:@"status"];
+    [params setObject:Id forKey:@"id"];
+    NSLog(@"%@", Id);
+	
+    [self loadRequestWithMethodName:@"statuses/repost.json"
+                         httpMethod:@"POST"
+                             params:params
+                       postDataType:kWBRequestPostDataTypeNormal
+                   httpHeaderFields:nil];
+    
+}
+
+- (void)commentWeiBoWithText:(NSString *)text Id:(NSString *)Id
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:2];
+    
+    //NSString *sendText = [text URLEncodedString];
+    
+	[params setObject:(text ? text : @"") forKey:@"comment"];
+    [params setObject:Id forKey:@"id"];
+	
+    [self loadRequestWithMethodName:@"comments/create.json"
+                         httpMethod:@"POST"
+                             params:params
+                       postDataType:kWBRequestPostDataTypeNormal
+                   httpHeaderFields:nil];
+    
+}
+
 #pragma mark - WBAuthorizeDelegate Methods
 
 - (void)authorize:(WBAuthorize *)authorize didSucceedWithAccessToken:(NSString *)theAccessToken userID:(NSString *)theUserID expiresIn:(NSInteger)seconds

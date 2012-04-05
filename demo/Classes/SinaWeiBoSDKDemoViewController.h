@@ -11,6 +11,7 @@
 #import "WBSendView.h"
 #import "WBLogInAlertView.h"
 #import "WBSDKTimelineViewController.h"
+#import "AppKey.h"
 
 @interface SinaWeiBoSDKDemoViewController : UIViewController <WBEngineDelegate, UIAlertViewDelegate, WBLogInAlertViewDelegate> {
     WBEngine *weiBoEngine;

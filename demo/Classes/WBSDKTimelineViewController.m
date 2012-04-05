@@ -16,6 +16,8 @@
 
 @implementation WBSDKTimelineViewController
 
+//@synthesize objMan;
+
 #pragma mark - WBSDKTimelineViewController Life Circle
 
 - (id)initWithAppKey:(NSString *)theAppKey appSecret:(NSString *)theAppSecret
@@ -97,6 +99,28 @@
     
     [self refreshTimeline];
     
+    // asynchronous load images
+    /**/
+    // Create the object manager
+	objMan = [[HJObjManager alloc] initWithLoadingBufferSize:6 memCacheSize:20];
+	
+	//if you are using for full screen images, you'll need a smaller memory cache than the defaults,
+	//otherwise the cached images will get you out of memory quickly
+	//objMan = [[HJObjManager alloc] initWithLoadingBufferSize:6 memCacheSize:1];
+	
+	// Create a file cache for the object manager to use
+	// A real app might do this durring startup, allowing the object manager and cache to be shared by several screens
+	NSString* cacheDirectory = [NSHomeDirectory() stringByAppendingString:@"/Library/Caches/imgcache/weiboimg/"] ;
+	HJMOFileCache* fileCache = [[[HJMOFileCache alloc] initWithRootPath:cacheDirectory] autorelease];
+	objMan.fileCache = fileCache;
+	
+	// Have the file cache trim itself down to a size & age limit, so it doesn't grow forever
+	fileCache.fileCountLimit = 100;
+	fileCache.fileAgeLimit = 60*60*24*7; //1 week
+	[fileCache trimCacheUsingBackgroundThread];
+    //[fileCache deleteAllFilesInDir:cacheDirectory];
+     
+    
     [indicatorView startAnimating];
 }
 
@@ -138,7 +162,7 @@
 
 - (void)onSendButtonPressed
 {
-    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:appKey appSecret:appSecret text:@"test" image:[UIImage imageNamed:@"bg.png"]];
+    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:appKey appSecret:appSecret text:@"test" image:[UIImage imageNamed:@"bg.png"] weiboType:Post Id:nil];
     [sendView setDelegate:self];
     
     [sendView show:YES];
@@ -165,7 +189,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WeiboDetailViewController *weibo = [[WeiboDetailViewController alloc] initWithData:[timeLine objectAtIndex:indexPath.row]];
+    WeiboDetailViewController *weibo = [[WeiboDetailViewController alloc] initWithData:[timeLine objectAtIndex:indexPath.row] obj:objMan];
 //    [weibo initWithData:[timeLine objectAtIndex:indexPath.row]];
     
     //[self.view setFrame:CGRectMake(-100, -300, 320, 480)];
@@ -180,23 +204,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *detail = [timeLine objectAtIndex:indexPath.row];
-//    NSInteger height = [[detail objectForKey:@"text"] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-//    //NSInteger height2 = [[[detail objectForKey:@"retweeted_status"] objectForKey:@"text"] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-//    NSLog(@"%d", height/10 *6 +70);
-//    //return height_ *13 + 30;
-//	return height/10 *6 + 70;
-//    //return 200;
-    // UILable的宽度
     CGFloat contentWidth = 240.000;
-    // 根据字体计算高度
-    //UIFont *baseFone     = [UIFont systemFontOfSize:14];
-    // 获取UILabel将要显示的数据
-    //NSLog(@"%@", [detail objectForKey:@"retweeted_status"]);
     NSString *content1    = [detail objectForKey:@"text"];
     NSString *content2 = [NSString stringWithFormat:@"%@:%@", [[[detail objectForKey:@"retweeted_status"] objectForKey:@"user"]objectForKey:@"screen_name"], [[detail objectForKey:@"retweeted_status"] objectForKey:@"text"]];
-    //NSLog(@"%@", content2);
-    // 1000仅仅是个约数，只要保证content能显示完整就行
-    // 在IB中要把UILabel的换行类型设置为UILineBreakModeWordWrap
     CGSize  contentSize1  = [content1 sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(contentWidth, 10000) lineBreakMode:UILineBreakModeWordWrap];
     CGSize  contentSize2  = [content2 sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(contentWidth, 10000) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height1 = contentSize1.height;
@@ -233,20 +243,14 @@
 {
     NSDictionary *detail = [timeLine objectAtIndex:indexPath.row];
     NSString *cellIndentifier = [NSString stringWithFormat:@"cell_%d", indexPath.row];
-    
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Timeline Cell"];
     WeiboCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifier];
     NSLog(@"%@", cell);
     if (cell == nil)
     {
-        //cell = [[[WeiboCell alloc] init] autorelease];
-        cell = [[[WeiboCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail] autorelease];
-        //[cell initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail];
+        //cell = [[[WeiboCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail] autorelease];
+        cell = [[[WeiboCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail obj:objMan] autorelease];
         NSLog(@"%@",cell);
     }
-    
-//    [cell initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail];
-//    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     NSLog(@"%@", cell);
     return cell;
 }

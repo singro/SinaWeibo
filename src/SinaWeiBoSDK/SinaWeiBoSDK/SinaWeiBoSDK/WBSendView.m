@@ -61,10 +61,12 @@ static BOOL WBIsDeviceIPad()
 @synthesize contentText;
 @synthesize contentImage;
 @synthesize delegate;
+@synthesize type;
+@synthesize Id;
 
 #pragma mark - WBSendView Life Circle
 
-- (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret text:(NSString *)text image:(UIImage *)image
+- (id)initWithAppKey:(NSString *)appKey appSecret:(NSString *)appSecret text:(NSString *)text image:(UIImage *)image weiboType:(WeiboType)type_ Id:(NSString *)Id_
 {
     if (self = [super initWithFrame:CGRectMake(0, 0, 320, 480)])
     {
@@ -142,6 +144,8 @@ static BOOL WBIsDeviceIPad()
         [self calculateTextLength];
         
         self.contentText = contentTextView.text;
+        self.type = type_;
+        self.Id = Id_;
         
         // image(if attachted)
         if (image)
@@ -237,7 +241,16 @@ static BOOL WBIsDeviceIPad()
 		return;
 	}
     
-    [engine sendWeiBoWithText:contentTextView.text image:contentImage];
+    if (self.type == Comment) {
+        [engine commentWeiBoWithText:contentTextView.text Id:Id];
+    } else if (self.type == Repost) {
+        [engine repostWeiBoWithText:contentTextView.text Id:Id];
+    } else if (self.type == Post) {
+        [engine sendWeiBoWithText:contentTextView.text image:contentImage];
+    }
+    
+    //[engine repostWeiBoWithText:@"This is a repost test." Id:@"3430357158616979"];
+    //[engine sendWeiBoWithText:contentTextView.text image:contentImage];
 }
 
 - (void)onClearTextButtonTouched:(id)sender

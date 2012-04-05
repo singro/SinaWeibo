@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HJManagedImageV.h"
+#import "HJObjManager.h"
 
 @interface CellBody : UITableViewCell {
     NSDictionary *detail;
+    HJObjManager *objMan;
 }
 
 @property (strong, readwrite) NSDictionary *detail;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)detail;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier data:(NSDictionary *)data obj:(HJObjManager *)_objMan;  // asynchronous load images
 - (NSString *)convertDate:(NSString *)date;
 @end

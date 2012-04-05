@@ -18,11 +18,11 @@
     if (self) {
         self.detail = data;
         // show user avatar
-        UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(3, 3, 40, 40)];
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[detail objectForKey:@"user"] objectForKey:@"profile_image_url"]]]];
-        [photo setBackgroundImage:image forState:UIControlStateNormal];
-        [self addSubview:photo];
-        [photo release];
+//        UIButton *photo = [[UIButton alloc] initWithFrame:CGRectMake(3, 3, 40, 40)];
+//        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[[detail objectForKey:@"user"] objectForKey:@"profile_image_url"]]]];
+//        [photo setBackgroundImage:image forState:UIControlStateNormal];
+//        [self addSubview:photo];
+//        [photo release];
         
         // show user name
         UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(50, 5, 200, 14)];

@@ -11,8 +11,8 @@
 // TODO:
 // Define your AppKey & AppSecret here to eliminate the errors
 
-#define kWBSDKDemoAppKey @"1383497354"
-#define kWBSDKDemoAppSecret @"8773117fc7036eae00d60571b9efc5e4"
+//#define kWBSDKDemoAppKey @"1383497354"
+//#define kWBSDKDemoAppSecret @"8773117fc7036eae00d60571b9efc5e4"
 
 #ifndef kWBSDKDemoAppKey
 #error
