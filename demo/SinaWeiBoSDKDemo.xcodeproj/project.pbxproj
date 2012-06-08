@@ -165,7 +165,6 @@
 		456BFBF0152E2EB1004DC6BF /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		456BFBF1152E2EB1004DC6BF /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		456BFBF2152E2EB1004DC6BF /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
-		456CD757158266E50079288A /* Readme */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme; sourceTree = "<group>"; };
 		45A6DB9A156D5A87008FAE75 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		45A6DB9B156D5A87008FAE75 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
 		45A6DB9C156D5A87008FAE75 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
@@ -315,7 +314,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				456CD757158266E50079288A /* Readme */,
 				450A1A98156DCCDD0050F5DA /* Icon.png */,
 				450A1A99156DCCDD0050F5DA /* Icon@2x.png */,
 				E6ABCCE3149889B0008E0A37 /* SinaWeiBoSDK */,
