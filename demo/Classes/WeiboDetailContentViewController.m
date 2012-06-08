@@ -25,13 +25,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-//    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 70)];
-//    [top setBackgroundColor:[UIColor blueColor]];
-//    [self.tableView addSubview:top];
+    UIImage *back = [[UIImage imageNamed:@"background.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    UIImageView *backView = [[UIImageView alloc] initWithImage:back];
+    [backView setFrame:CGRectMake(0, 0, 320, 640)];
+    [self.tableView setBackgroundView:backView];
+    //    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 70)];
+    //    [top setBackgroundColor:[UIColor blueColor]];
+    //    [self.tableView addSubview:top];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -76,7 +79,7 @@
     if (indexPath.row == 2) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
-    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     return cell;
@@ -117,7 +120,7 @@
     } else {
         height_ = 60;
     }
-    return height_ + 70;
+    return height_ + 70 + 50; // add 50 to show bottom of cell
 }
 
 

@@ -78,6 +78,8 @@ static BOOL WBIsDeviceIPad()
         [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         
         // add the panel view
+        //        panelView = [[UIView alloc] initWithFrame:CGRectMake(16, 73, 288, 335)];
+        //        panelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 288, 335)];
         panelView = [[UIView alloc] initWithFrame:CGRectMake(16, 73, 288, 335)];
         panelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 288, 335)];
         [panelImageView setImage:[[UIImage imageNamed:@"bg.png"] stretchableImageWithLeftCapWidth:18 topCapHeight:18]];
@@ -255,7 +257,7 @@ static BOOL WBIsDeviceIPad()
 
 - (void)onClearTextButtonTouched:(id)sender
 {
-   [contentTextView setText:@""];
+    [contentTextView setText:@""];
 	[self calculateTextLength];
 }
 
@@ -281,7 +283,7 @@ static BOOL WBIsDeviceIPad()
     CGPoint screenCenter = CGPointMake(
                                        screenFrame.origin.x + ceil(screenFrame.size.width / 2),
                                        screenFrame.origin.y + ceil(screenFrame.size.height / 2));
-
+    
     if (UIInterfaceOrientationIsLandscape(orientation))
     {
         [self setFrame:CGRectMake(0, 0, 480, 320)];
@@ -290,14 +292,14 @@ static BOOL WBIsDeviceIPad()
         [contentImageView setCenter:CGPointMake(448 / 2, 155 + 60)];
         [clearImageButton setCenter:CGPointMake(contentImageView.center.x + contentImageView.frame.size.width / 2,
                                                 contentImageView.center.y - contentImageView.frame.size.height / 2)];
-    
+        
         [wordCountLabel setFrame:CGRectMake(224 + 90, 100 + 60, 30, 30)];
         [clearTextButton setFrame:CGRectMake(224 + 120, 101 + 60, 30, 30)];
         [panelImageView setFrame:CGRectMake(0, 0, 480 - 32, 280)];
         [panelImageView setImage:[UIImage imageNamed:@"bg_land.png"]];
         [sendButton setFrame:CGRectMake(480- 32 - 15 - 48, 13, 48, 30)];
         [titleLabel setCenter:CGPointMake(448 / 2, 27)];
-    
+        
         if (isKeyboardShowing)
         {
             [contentTextView setFrame:CGRectMake(13, 50, 480 - 32 - 26, 60)];
@@ -309,7 +311,7 @@ static BOOL WBIsDeviceIPad()
             [wordCountLabel setFrame:CGRectMake(224 + 90, 100, 30, 30)];
             [clearTextButton setFrame:CGRectMake(224 + 120, 101, 30, 30)];
         }
-    
+        
     }
     else
     {
@@ -321,23 +323,23 @@ static BOOL WBIsDeviceIPad()
             [panelView setFrame:CGRectMake(16, 73 - 10 - 51, 288, 335)];
         }
         
-        [contentTextView setFrame:CGRectMake(13, 60, 288 - 26, 150)];
+        [contentTextView setFrame:CGRectMake(13, 60, 288 - 26, 150+50+50)];
         [contentImageView setCenter:CGPointMake(144, 260)];
         [clearImageButton setCenter:CGPointMake(contentImageView.center.x + contentImageView.frame.size.width / 2,
                                                 contentImageView.center.y - contentImageView.frame.size.height / 2)];
         
-        [wordCountLabel setFrame:CGRectMake(210, 190, 30, 30)];
-        [clearTextButton setFrame:CGRectMake(240, 191, 30, 30)];
+        [wordCountLabel setFrame:CGRectMake(210, 190+50+50, 30, 30)];
+        [clearTextButton setFrame:CGRectMake(240, 191+50+50, 30, 30)];
         [panelImageView setFrame:CGRectMake(0, 0, 288, 335)];
         [panelImageView setImage:[UIImage imageNamed:@"bg.png"]];
         
         [sendButton setFrame:CGRectMake(288 - 15 - 48, 13, 48, 30)];
         [titleLabel setCenter:CGPointMake(144, 27)];
-    
+        
     }
     
     [self setCenter:screenCenter];
-
+    
     [self setTransform:[self transformForOrientation:orientation]];
     
     previousOrientation = orientation;
@@ -611,7 +613,7 @@ static BOOL WBIsDeviceIPad()
         [contentImageView setCenter:CGPointMake(448 / 2, 155)];
         [clearImageButton setCenter:CGPointMake(contentImageView.center.x + contentImageView.frame.size.width / 2,
                                                 contentImageView.center.y - contentImageView.frame.size.height / 2)];
-
+        
 		[wordCountLabel setFrame:CGRectMake(224 + 90, 100, 30, 30)];
 		[clearTextButton setFrame:CGRectMake(224 + 120, 101, 30, 30)];
         

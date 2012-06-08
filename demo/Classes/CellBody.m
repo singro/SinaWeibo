@@ -28,37 +28,44 @@
         NSInteger height1 = contentSize1.height;
         
         // Title User name
-        NSString *nameStr = [[detail objectForKey:@"user"] objectForKey:@"screen_name"];
-        UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(60, 3, 200, 16)];
-        //[title setText:[NSString stringWithFormat:@"r:%d c:%d w:%d id:%@", 1, height, height2, wid]];
-        [name setFont:[UIFont fontWithName:@"Helvetica" size:14]];
-        [name setFont:[UIFont boldSystemFontOfSize:14]];
-        //        name.layer.borderColor = [UIColor blackColor].CGColor;
-        //        name.layer.borderWidth = 1.0;
-        [name setTextColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1]];
-        //[title setBackgroundColor:[UIColor yellowColor]];
-        [name setText:nameStr];
-        [name setTextAlignment:UITextAlignmentLeft];
-        [self addSubview:name];
-        [name release];
+        //        NSString *nameStr = [[detail objectForKey:@"user"] objectForKey:@"screen_name"];
+        //        UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(60, 3, 200, 16)];
+        //        //[title setText:[NSString stringWithFormat:@"r:%d c:%d w:%d id:%@", 1, height, height2, wid]];
+        //        [name setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+        //        [name setFont:[UIFont boldSystemFontOfSize:14]];
+        //        //        name.layer.borderColor = [UIColor blackColor].CGColor;
+        //        //        name.layer.borderWidth = 1.0;
+        //        [name setTextColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1]];
+        //        //[title setBackgroundColor:[UIColor yellowColor]];
+        //        [name setText:nameStr];
+        //        [name setTextAlignment:UITextAlignmentLeft];
+        //        [self addSubview:name];
+        //        [name release];
         
-        // Title time
-        NSString *date = [detail objectForKey:@"created_at"];
-        NSString *outputdate = [self convertDate:date];
-        NSLog(@"%@", date);
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(248, 3, 70, 14)];
-        //[title setText:[NSString stringWithFormat:@"r:%d c:%d w:%d id:%@", 1, height, height2, wid]];
-        [title setFont:[UIFont fontWithName:@"Helvetica" size:9]];
-        [title setTextColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5]];
-        //[title setBackgroundColor:[UIColor yellowColor]];
-        [title setText:outputdate];
-        [title setTextAlignment:UITextAlignmentRight];
-        [self addSubview:title];
-        [title release];
+        //        // Title time
+        //        NSString *date = [detail objectForKey:@"created_at"];
+        //        NSString *outputdate = [self convertDate:date];
+        //        NSLog(@"%@", date);
+        //        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(248, 3, 70, 14)];
+        //        //[title setText:[NSString stringWithFormat:@"r:%d c:%d w:%d id:%@", 1, height, height2, wid]];
+        //        [title setFont:[UIFont fontWithName:@"Helvetica" size:9]];
+        //        [title setTextColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5]];
+        //        //[title setBackgroundColor:[UIColor yellowColor]];
+        //        [title setText:outputdate];
+        //        [title setTextAlignment:UITextAlignmentRight];
+        //        [self addSubview:title];
+        //        [title release];
         
+        //        // background 
+        //        //UIImage *background = [[UIImage imageNamed:@"background.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(24, 60, 19, 19)];
+        //        UIImage *back = [[UIImage imageNamed:@"background.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+        //        UIImageView *backView = [[UIImageView alloc] initWithImage:back];
+        //        [backView setFrame:CGRectMake(0, 0, 320, 640)];
+        //        [self addSubview:backView];
+        //        //[self sendSubviewToBack:backView];
         
         // weibo txt
-        UILabel *txt = [[UILabel alloc] initWithFrame:CGRectMake(60, 23, 240, height1)];
+        UILabel *txt = [[UILabel alloc] initWithFrame:CGRectMake(60-20, 23, 240, height1)];
         [txt setText:[detail objectForKey:@"text"]];
         [txt setFont:[UIFont fontWithName:@"Helvetica" size:15]];
         [txt setLineBreakMode:UILineBreakModeWordWrap];
@@ -73,7 +80,7 @@
         NSString *picURL1 = [detail objectForKey:@"bmiddle_pic"];
         if (picURL1 != NULL) {
             // With HJManageImage
-            HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60, 25+height1, 75, 75)] autorelease];
+            HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60-20, 25+height1, 75, 75)] autorelease];
             mi.tag = 999;
             [self addSubview:mi];
             mi.url = [NSURL URLWithString:picURL1];
@@ -97,7 +104,7 @@
             NSInteger height2 = contentSize2.height;
             height2_ = height2 + 30;
             
-            UILabel *retweetedTxt = [[UILabel alloc] initWithFrame:CGRectMake(60, height1 + 27 + 15, 240, height2)];
+            UILabel *retweetedTxt = [[UILabel alloc] initWithFrame:CGRectMake(60-20, height1 + 27 + 15, 240, height2)];
             NSString *txt = [NSString stringWithFormat:@"%@:%@", [[retweeted objectForKey:@"user"] objectForKey:@"screen_name"], [retweeted objectForKey:@"text"]];
             [retweetedTxt setText:txt];
             [retweetedTxt setFont:[UIFont fontWithName:@"Helvetica" size:14]];
@@ -113,7 +120,7 @@
             NSString *picURL = [retweeted objectForKey:@"bmiddle_pic"];
             if (picURL != NULL) {
                 // With HJManageImage
-                HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60, height1 + 27 + 15 +2 + height2, 75, 75)] autorelease];
+                HJManagedImageV *mi = [[[HJManagedImageV alloc] initWithFrame:CGRectMake(60-20, height1 + 27 + 15 +2 + height2, 75, 75)] autorelease];
                 mi.tag = 1000;
                 [self addSubview:mi];
                 mi.url = [NSURL URLWithString:picURL];
@@ -129,26 +136,43 @@
             }
             
             // bubble 
-            UIImage *background = [[UIImage imageNamed:@"post_bubble_2.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(24, 60, 19, 19)];
+            UIImage *background = [[UIImage imageNamed:@"bubble.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 56, 15, 15)];
             UIImageView *imgView = [[UIImageView alloc] initWithImage:background];
-            [imgView setFrame:CGRectMake(50, height1+27, 260, height2_)];
+            [imgView setFrame:CGRectMake(50-20, height1+27, 260, height2_)];
             [self addSubview:imgView];
             [self sendSubviewToBack:imgView];
+            //[self sendSubviewToBack:backView];
             
         }
         // Retweet & Comment Num
         //UILabel *retweet = [[UILabel alloc]initWithFrame:CGRectMake(230, 17+height1+3+height2_+3+2, 86, 14)];
         NSInteger cellHeight;
-        if (height1 + height2_ < 50) {
-            cellHeight = 50;
-        } else {
-            cellHeight = height1 + height2_ + 27;
-        }
-        UILabel *retweet = [[UILabel alloc]initWithFrame:CGRectMake(230, cellHeight, 86, 14)];
+        //        if (height1 + height2_ < 50) {
+        //            cellHeight = 50+15;
+        //        } else {
+        cellHeight = height1 + height2_ + 27;
+        //        }
+        
+        // Title time
+        NSString *date = [detail objectForKey:@"created_at"];
+        NSString *outputdate = [self convertDate:date];
+        NSLog(@"%@", date);
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0-20, cellHeight, 86, 14)];
+        //[title setText:[NSString stringWithFormat:@"r:%d c:%d w:%d id:%@", 1, height, height2, wid]];
+        [title setFont:[UIFont fontWithName:@"Helvetica" size:9]];
+        [title setTextColor:[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5]];
+        [title setBackgroundColor:[UIColor clearColor]];
+        [title setText:outputdate];
+        [title setTextAlignment:UITextAlignmentRight];
+        [self addSubview:title];
+        [title release];
+        
+        UILabel *retweet = [[UILabel alloc]initWithFrame:CGRectMake(230-20, cellHeight, 86, 14)];
         NSString *rtStr = [NSString stringWithFormat:@"转发:%@  评论:%@", [detail objectForKey:@"reposts_count"], [detail objectForKey:@"comments_count"]];
         [retweet setText:rtStr];
         [retweet setFont:[UIFont fontWithName:@"Helvetica" size:9]];
         [retweet setTextAlignment:UITextAlignmentRight];
+        [retweet setBackgroundColor:[UIColor clearColor]];
         [self addSubview:retweet];
     }
     
@@ -158,7 +182,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

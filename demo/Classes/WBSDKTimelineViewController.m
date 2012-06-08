@@ -15,6 +15,7 @@
 @end
 
 @implementation WBSDKTimelineViewController
+@synthesize next_cursor;
 
 //@synthesize objMan;
 
@@ -61,28 +62,32 @@
 {
     [super viewDidLoad];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     timeLineTableView = [[UITableView alloc] init];
     [timeLineTableView setDelegate:self];
     [timeLineTableView setDataSource:self];
-    [timeLineTableView setBackgroundColor:[UIColor whiteColor]];
+    UIImage *backV = [[UIImage imageNamed:@"background.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    UIImageView *backView = [[UIImageView alloc] initWithImage:backV];
+    [backView setFrame:CGRectMake(0, 0, 320, 640)];
+    [timeLineTableView setBackgroundView:backView];
     
     [self.view addSubview:timeLineTableView];
     
     indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.view addSubview:indicatorView];
     
-    //draw navi
-    UIButton *back = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [back setFrame:CGRectMake(2, 2+10, 100, 37)];
-    [back setTitle:@"Logout" forState:UIControlStateNormal];
-    [back addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:back];
-    UIButton *write = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [write setFrame:CGRectMake(218, 2+10, 100, 37)];
-    [write setTitle:@"Write" forState:UIControlStateNormal];
-    [write addTarget:self action:@selector(onSendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:write];
+//    //draw navi
+//    UIButton *back = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    [back setFrame:CGRectMake(2, 2+10, 100, 37)];
+//    [back setTitle:@"Logout" forState:UIControlStateNormal];
+//    [back addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:back];
+//    UIButton *write = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    [write setFrame:CGRectMake(218, 2+10, 100, 37)];
+//    [write setTitle:@"Write" forState:UIControlStateNormal];
+//    [write addTarget:self action:@selector(onSendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:write];
 
     BOOL hasStatusBar = ![UIApplication sharedApplication].statusBarHidden;
     int height = ((hasStatusBar) ? 20 : 0);
@@ -93,7 +98,7 @@
     }
     else
     {
-        [timeLineTableView setFrame:CGRectMake(0, 0+37, 320, 480 - height - 44)];
+        [timeLineTableView setFrame:CGRectMake(0, 0, 320, 480 - height - 44)];
         [indicatorView setCenter:CGPointMake(160, 240)];
     }
     
@@ -120,6 +125,26 @@
 	[fileCache trimCacheUsingBackgroundThread];
     //[fileCache deleteAllFilesInDir:cacheDirectory];
      
+    if (_refreshHeaderView == nil) {
+        EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - timeLineTableView.bounds.size.height, self.view.frame.size.width, timeLineTableView.bounds.size.height)];
+		view.delegate = self;
+		[timeLineTableView addSubview:view];
+		_refreshHeaderView = view;
+		//[view release];
+    }
+    
+    //  update the last update date
+	[_refreshHeaderView refreshLastUpdatedDate];
+    
+    if (_loadMoreFooterView == nil) {		
+		LoadMoreTableFooterView *view = [[LoadMoreTableFooterView alloc] initWithFrame:CGRectMake(0.0f, timeLineTableView.contentSize.height, self.view.frame.size.width, timeLineTableView.bounds.size.height)];
+		view.delegate = self;
+        NSLog(@"%f",timeLineTableView.bounds.size.height);
+		[timeLineTableView addSubview:view];
+		_loadMoreFooterView = view;
+		[view release];
+		
+	}
     
     [indicatorView startAnimating];
 }
@@ -162,7 +187,7 @@
 
 - (void)onSendButtonPressed
 {
-    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:appKey appSecret:appSecret text:@"test" image:[UIImage imageNamed:@"bg.png"] weiboType:Post Id:nil];
+    WBSendView *sendView = [[WBSendView alloc] initWithAppKey:appKey appSecret:appSecret text:@"" image:nil weiboType:Post Id:nil];
     [sendView setDelegate:self];
     
     [sendView show:YES];
@@ -178,9 +203,30 @@
 - (void)refreshTimeline
 {
     //NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"1972172260", @"uid", nil];
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:
+                           @"20", @"count",
+                           nil];
     [engine loadRequestWithMethodName:@"statuses/home_timeline.json"
                            httpMethod:@"GET"
-                               params:nil //param
+                               params:param
+                         postDataType:kWBRequestPostDataTypeNone
+                     httpHeaderFields:nil];
+}
+
+- (void)loadMore
+{
+    //NSString *latestId = [[timeLine objectAtIndex:[timeLine count] - 1] objectForKey:@"id"];
+//    NSLog(@"latestid: %lld", *((int64_t*)latestId)-1);
+    //NSLog(@"max_id:%lld",*((int64_t*)latestId));
+    
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:
+                           next_cursor, @"max_id",
+                           @"20", @"count",
+//                           @"1", @"page",
+                           nil];
+    [engine loadRequestWithMethodName:@"statuses/home_timeline.json"
+                           httpMethod:@"GET"
+                               params:param
                          postDataType:kWBRequestPostDataTypeNone
                      httpHeaderFields:nil];
 }
@@ -242,21 +288,149 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *detail = [timeLine objectAtIndex:indexPath.row];
+    NSLog(@"%@", detail);
     NSString *cellIndentifier = [NSString stringWithFormat:@"cell_%d", indexPath.row];
-    WeiboCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifier];
-    NSLog(@"%@", cell);
+    //WeiboCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifier];
+    WeiboCell *cell = (WeiboCell *)[tableView cellForRowAtIndexPath:indexPath];
+    //NSLog(@"%@", cell);
     if (cell == nil)
     {
         //cell = [[[WeiboCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail] autorelease];
         cell = [[[WeiboCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier data:detail obj:objMan] autorelease];
         NSLog(@"%@",cell);
     }
-    NSLog(@"%@", cell);
+    //NSLog(@"%@", cell);
     return cell;
 }
 
 #pragma mark - WeiboCellDelegate methods
 
+
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)loadMoreTableViewDataSource{
+	NSLog(@"loadMoreTableViewDataSource");
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+    _reloading_f = YES;
+    [self loadMore];
+    
+	
+	
+}
+
+- (void)doneLoadingMoreTableViewData{
+	
+	//  model should call this when its done loading
+    [timeLineTableView reloadData];
+	_reloading_f = NO;
+	[_loadMoreFooterView loadMoreScrollViewDataSourceDidFinishedLoading:timeLineTableView];
+}
+
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate Methods
+
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{	
+    //isFooter = TRUE;
+    NSArray *indexex = [timeLineTableView indexPathsForVisibleRows];
+    NSIndexPath *ip = [indexex objectAtIndex:0];
+    NSLog(@"scrollViewDidScroll\n\nrow:%d\n\n", ip.row);
+    if (ip.row < 10) {
+        isFooter = FALSE;
+    } else {
+        isFooter = TRUE;
+    }
+	if (isFooter) {
+        [_loadMoreFooterView loadMoreScrollViewDidScroll:scrollView];
+    } else {
+        [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    //isFooter = TRUE;
+    NSArray *indexex = [timeLineTableView indexPathsForVisibleRows];
+    NSIndexPath *ip = [indexex objectAtIndex:0];
+    if (ip.row < 10) {
+        isFooter = FALSE;
+    } else {
+        isFooter = TRUE;
+    }
+    NSLog(@"scrollViewDidEndDragging\n");
+	if (isFooter) {
+        [_loadMoreFooterView loadMoreScrollViewDidEndDragging:scrollView];
+    } else {
+        [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    }
+}
+
+
+#pragma mark -
+#pragma mark LoadMoreTableFooterDelegate Methods
+
+- (void)loadMoreTableFooterDidTriggerRefresh:(LoadMoreTableFooterView *)view {
+    //isFooter = TRUE;
+    NSLog(@"loadMoreTableFooterDidTriggerRefresh\n");
+	//[self reloadTableViewDataSource];
+    [self loadMoreTableViewDataSource];
+//	[self performSelector:@selector(doneLoadingMoreTableViewData) withObject:nil afterDelay:0];
+    
+}
+
+- (BOOL)loadMoreTableFooterDataSourceIsLoading:(LoadMoreTableFooterView *)view {
+    //isFooter = TRUE;
+    NSLog(@"loadMoreTableFooterDataSourceIsLoading\n");
+	return _reloading_f;
+}
+
+
+
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+	_reloading = YES;
+    
+    [self refreshTimeline];
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+	
+	
+}
+
+- (void)doneLoadingTableViewData{
+	[timeLineTableView reloadData];
+	//  model should call this when its done loading
+	_reloading = NO;
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:timeLineTableView];
+	
+}
+
+#pragma mark EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+	//isFooter = FALSE;
+    NSLog(@"egoRefreshTableHeaderDidTriggerRefresh\n");
+	[self reloadTableViewDataSource];
+//	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
+	
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+	//isFooter = FALSE;
+    NSLog(@"egoRefreshTableHeaderDataSourceIsLoading\n");
+	return _reloading; // should return if data source model is reloading
+	
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+	//isFooter = FALSE;
+    NSLog(@"egoRefreshTableHeaderDataSourceLastUpdated\n");
+	return [NSDate date]; // should return date data source was last changed
+	
+}
 
 
 #pragma mark - WBEngineDelegate Methods
@@ -271,9 +445,42 @@
 //    [back setAlpha:0.6];
 //    [self.view addSubview:back];
     NSLog(@"requestDidSucceedWithResult: %@", result);
+    NSLog(@"\n\n1111Loading000 head:   %d", _reloading);
+    NSLog(@"\n\n1111Loading000 footer: %d", _reloading_f);
+    //[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
+    if ([timeLine count] != 0) {
+        NSArray *indexex = [timeLineTableView indexPathsForVisibleRows];
+        NSIndexPath *ip = [indexex objectAtIndex:0];
+        if (ip.row < 10) {
+            isFooter = FALSE;
+        } else {
+            isFooter = TRUE;
+        }
+        NSLog(@"scrollViewDidEndDragging\n");
+        if (isFooter) {
+            [self performSelector:@selector(doneLoadingMoreTableViewData) withObject:nil afterDelay:0];
+        } else {
+            [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
+        }
+    }
+    
+    
     if ([result isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *dict = (NSDictionary *)result;
+        NSLog(@"\n\nLoading000 head:   %d", _reloading);
+        NSLog(@"\n\nLoading000 footer: %d", _reloading_f);
+        if (next_cursor == nil) {
+            next_cursor = @"";
+        }
+        next_cursor = [NSString stringWithFormat:@"%@", [dict objectForKey:@"next_cursor"]];
+        if ([next_cursor retainCount] < 2) {
+            [next_cursor retain];
+        }
+        if (!isFooter) {
+            [timeLine removeAllObjects];
+        }
+        NSLog(@"dict: \n%@", dict);
         [timeLine addObjectsFromArray:[dict objectForKey:@"statuses"]];
 //        NSInteger height = [[[[dict objectForKey:@"statuses"] objectForKey:@"retweeted_status"] objectForKey:@"text"] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
         [timeLineTableView reloadData];

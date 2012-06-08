@@ -12,8 +12,9 @@
 #import "WBEngine.h"
 #import "AppKey.h"
 #import "HJObjManager.h"
+#import "MBProgressHUD.h"
 
-@interface WeiboDetailViewController : UIViewController <WBEngineDelegate,WBSendViewDelegate> {
+@interface WeiboDetailViewController : UIViewController <WBEngineDelegate,WBSendViewDelegate, MBProgressHUDDelegate> {
     NSDictionary *detail;
     HJObjManager *objMan;
 }
