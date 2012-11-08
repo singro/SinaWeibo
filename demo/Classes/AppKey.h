@@ -9,8 +9,8 @@
 #ifndef SinaWeiBoSDKDemo_AppKey_h
 #define SinaWeiBoSDKDemo_AppKey_h
 
-#error "app key here"
-#define kWBSDKDemoAppKey @"" 
+#error "Add your app key here"
+#define kWBSDKDemoAppKey @""
 #define kWBSDKDemoAppSecret @"" 
 
 #endif

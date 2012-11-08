@@ -17,6 +17,7 @@
 		28D7ACF80DDB3853001CB0EB /* SinaWeiBoSDKDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* SinaWeiBoSDKDemoViewController.m */; };
 		29734AFA15272A0B003F42FF /* WeiboDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29734AF915272A0B003F42FF /* WeiboDetailViewController.m */; };
 		2978338215271BF400433238 /* CellBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 2978338115271BF400433238 /* CellBody.m */; };
+		29AF19B1164BA1A400E8350C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29AF19B0164BA1A400E8350C /* Default-568h@2x.png */; };
 		29B04A491527165000AD054C /* WeiboDetailContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B04A481527165000AD054C /* WeiboDetailContentViewController.m */; };
 		29F01B5F15272292006D53EA /* CellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F01B5E15272292006D53EA /* CellHeader.m */; };
 		29F2F3EA1521B86800322347 /* WeiboCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F2F3E91521B86800322347 /* WeiboCell.m */; };
@@ -120,6 +121,7 @@
 		29734AF915272A0B003F42FF /* WeiboDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiboDetailViewController.m; sourceTree = "<group>"; };
 		2978338015271BF400433238 /* CellBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBody.h; sourceTree = "<group>"; };
 		2978338115271BF400433238 /* CellBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellBody.m; sourceTree = "<group>"; };
+		29AF19B0164BA1A400E8350C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		29B04A471527165000AD054C /* WeiboDetailContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboDetailContentViewController.h; sourceTree = "<group>"; };
 		29B04A481527165000AD054C /* WeiboDetailContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiboDetailContentViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				29AF19B0164BA1A400E8350C /* Default-568h@2x.png */,
 				450A1A98156DCCDD0050F5DA /* Icon.png */,
 				450A1A99156DCCDD0050F5DA /* Icon@2x.png */,
 				E6ABCCE3149889B0008E0A37 /* SinaWeiBoSDK */,
@@ -618,7 +621,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SinaWeiBoSDKDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -702,6 +705,7 @@
 				45A6DBDD156D677B008FAE75 /* 37x-Checkmark.png in Resources */,
 				450A1A9A156DCCDD0050F5DA /* Icon.png in Resources */,
 				450A1A9B156DCCDD0050F5DA /* Icon@2x.png in Resources */,
+				29AF19B1164BA1A400E8350C /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,7 +776,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Apple Team (UTRG3JBVUC)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -781,6 +785,7 @@
 				INFOPLIST_FILE = "SinaWeiBoSDKDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = SinaWeiBoSDKDemo;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5F228568-95FA-4E05-A609-B57841BB88E9";
 			};
 			name = Debug;
 		};
@@ -812,7 +817,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = iphoneos5.1;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -830,7 +835,7 @@
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos5.1;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
